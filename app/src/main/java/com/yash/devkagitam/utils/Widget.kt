@@ -1,0 +1,32 @@
+package com.yash.devkagitam.utils
+
+import android.annotation.SuppressLint
+import android.content.Context
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+
+abstract class Widget() {
+    /** Each widget defines its UI here. */
+    @Composable
+    protected abstract fun Content(modifier: Modifier, ctx: Context)
+    @Composable
+    abstract fun OnHold(ctx: Context)
+    @Composable
+    abstract fun OnClick(ctx: Context)
+
+
+    /** Entry point for rendering. Allows natural height for staggered grid. */
+    @SuppressLint("UnusedBoxWithConstraintsScope")
+    @Composable
+    fun Render(context: Context) {
+        Box(
+            modifier = Modifier
+                .wrapContentHeight()  // ✅ Natural height based on content
+        ) {
+            Content(Modifier.fillMaxWidth(), context)
+        }
+    }
+}
