@@ -1,33 +1,30 @@
-package com.yash.devkagitam.utils
+package com.yash.dev
 
 import android.app.DownloadManager
 import android.content.Context
 import android.database.Cursor
 import androidx.core.net.toUri
-import com.yash.devkagitam.registries.AppRegistry
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-const val ZIP_FILES = "zipFiles"
-
 fun downloader(
+    ctx : Context,
     link: String,
-    saveFileAt : String? = null,
+    saveFileAt : String ,
     name: String,
     onProgress: (Int) -> Unit,
     onComplete: (Boolean) -> Unit
 ) : Long{
-    val ctx = AppRegistry.getAppContext()
     val downloadManager = ctx.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
 
     val req = DownloadManager.Request(link.toUri())
         .setTitle("Downloading $name")
         .setDescription("Please wait...")
         .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-        .setDestinationUri(saveFileAt?.toUri() ?: "${ctx.filesDir}/$ZIP_FILES/$name".toUri())
+        .setDestinationUri(saveFileAt.toUri())
 
     val downloadId: Long = downloadManager.enqueue(req)
 
@@ -72,8 +69,7 @@ fun downloader(
     return downloadId
 }
 
-fun downloadStatusById(downloadId : Long, onProgress: (Int) -> Unit, onComplete: (Boolean) -> Unit){
-    val ctx = AppRegistry.getAppContext()
+fun downloadStatusById(ctx: Context,downloadId : Long, onProgress: (Int) -> Unit, onComplete: (Boolean) -> Unit){
     val downloadManager = ctx.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
 
     CoroutineScope(Dispatchers.IO).launch {

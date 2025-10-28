@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.yash.dev.PaperEntryPoint
 import com.yash.devkagitam.__dev__.DevPaperEntity
 import com.yash.devkagitam.db.plugins.MetaDataPluginEntity
 import com.yash.devkagitam.registries.AppRegistry
@@ -43,7 +44,6 @@ import com.yash.devkagitam.registries.ContextRegistry
 import com.yash.devkagitam.screens.viewModels.PaperElementViewModel
 import com.yash.devkagitam.screens.viewModels.PaperElementViewModelFactory
 import com.yash.devkagitam.screens.viewModels.PaperScreenViewModel
-import com.yash.devkagitam.utils.PaperEntryPoint
 @Composable
 fun PaperScreen(vm: PaperScreenViewModel = viewModel()) {
 
@@ -236,9 +236,10 @@ fun CurrentPaperScreen(){
         Modifier.fillMaxSize()
     ){
         val (instance, name) = AppRegistry.getCurrentPlugin()
+        val navController = AppRegistry.getNavController()
         if (instance != null && name != null) {
             val ctx = ContextRegistry.getPluginContext(name)
-            instance.RenderWithHome(ctx)
+            instance.RenderWithHome(ctx, navController)
         } else {
             Text("No paper loaded")
         }

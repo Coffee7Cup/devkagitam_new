@@ -1,12 +1,14 @@
 package com.yash.devkagitam.utils
 
 import com.google.gson.Gson
+import com.yash.dev.unzipPaper
 import com.yash.devkagitam.db.api.ApiDB
 import com.yash.devkagitam.db.api.ApiEntity
 import com.yash.devkagitam.db.plugins.MetaDataPluginDB
 import com.yash.devkagitam.db.plugins.MetaDataPluginEntity
 import com.yash.devkagitam.db.widgets.WidgetDB
 import com.yash.devkagitam.db.widgets.WidgetEntity
+import com.yash.devkagitam.registries.AppRegistry
 import java.io.File
 import java.io.FileReader
 
@@ -21,11 +23,14 @@ data class MetaDataFile(
   val apiInterface: String?
 )
 
+const val UNZIPPED_PAPERS = "papers"
 suspend fun setupPlugin(parent_path: String, name: String) {
 
+  val appCtx = AppRegistry.getAppContext()
+
   val path = unzipPaper(
-      parent_path,
-      name = name
+    zipFilePath = parent_path,
+    saveFileAt = "${appCtx.filesDir}/$UNZIPPED_PAPERS/$name",
   )
 
   //Unzip the file here---very important-------

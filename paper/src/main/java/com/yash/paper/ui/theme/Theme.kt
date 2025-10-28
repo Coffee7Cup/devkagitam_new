@@ -10,7 +10,6 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.yash.devkagitam.ui.theme.BitcountFont
 import com.yash.paper.R
 
 val BitCountFont = FontFamily(
@@ -19,12 +18,12 @@ val BitCountFont = FontFamily(
 
 val CustomTypography = Typography(
     bodyLarge = TextStyle(
-        fontFamily = BitcountFont,  // use your font here
+        fontFamily = BitCountFont,  // use your font here
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp
     ),
     titleLarge = TextStyle(
-        fontFamily = BitcountFont,
+        fontFamily = BitCountFont,
         fontWeight = FontWeight.Bold,
         fontSize = 22.sp
     )

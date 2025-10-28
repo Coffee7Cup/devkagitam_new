@@ -77,7 +77,7 @@ fun NavigationMain(){
             App()
         }
 
-        composable("plugin"){
+        composable("paper"){
             CurrentPaperScreen()
         }
 

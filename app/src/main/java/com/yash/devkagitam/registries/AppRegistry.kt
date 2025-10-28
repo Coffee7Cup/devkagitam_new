@@ -3,7 +3,7 @@ package com.yash.devkagitam.registries
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.navigation.NavController
-import com.yash.devkagitam.utils.PaperEntryPoint
+import com.yash.dev.PaperEntryPoint
 
 /**
  * Global Registry for the SDK.

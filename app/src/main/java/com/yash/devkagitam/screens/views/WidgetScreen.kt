@@ -43,12 +43,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.yash.dev.Widget
 import com.yash.devkagitam.__dev__.DevPaperEntity
 import com.yash.devkagitam.registries.ContextRegistry
 import com.yash.devkagitam.registries.PaperInstanceRegistry.getWidgetInstance
 import com.yash.devkagitam.db.widgets.WidgetEntity
 import com.yash.devkagitam.screens.viewModels.WidgetScreenViewModel
-import com.yash.devkagitam.utils.Widget
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

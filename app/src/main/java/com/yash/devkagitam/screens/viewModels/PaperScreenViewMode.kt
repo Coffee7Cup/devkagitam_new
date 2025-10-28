@@ -1,21 +1,14 @@
 package com.yash.devkagitam.screens.viewModels
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.yash.devkagitam.registries.AppRegistry
 import com.yash.devkagitam.registries.PaperInstanceRegistry
-import com.yash.devkagitam.__dev__.DevPaperEntity
 import com.yash.devkagitam.db.plugins.MetaDataPluginDB
 import com.yash.devkagitam.db.plugins.MetaDataPluginEntity
-import com.yash.devkagitam.registries.ContextRegistry
-import com.yash.devkagitam.utils.PaperEntryPoint
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.io.File
 

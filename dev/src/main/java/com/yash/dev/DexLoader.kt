@@ -1,12 +1,11 @@
-package com.yash.devkagitam.utils
+package com.yash.dev
 
-import com.yash.devkagitam.registries.AppRegistry
+import android.content.Context
 import dalvik.system.DexClassLoader
 import java.io.File
 
-fun loadDex(apkPath: String, classToLoad: String): Any {
+fun loadDex(appContext : Context, apkPath: String, classToLoad: String): Any {
     val apkFile = File(apkPath)
-    val appContext = AppRegistry.getAppContext()
 
     if (!apkFile.exists()) {
         throw Error(

@@ -11,11 +11,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.JsonParser
+import com.yash.dev.downloadStatusById
+import com.yash.dev.downloader
 import com.yash.devkagitam.registries.AppRegistry
 import com.yash.devkagitam.db.plugins.MetaDataPluginDB
-import com.yash.devkagitam.utils.ZIP_FILES
-import com.yash.devkagitam.utils.downloadStatusById
-import com.yash.devkagitam.utils.downloader
 import com.yash.devkagitam.utils.setupPlugin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +23,8 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.FileNotFoundException
+
+const val ZIP_FILES = "zipFiles"
 
 const val DOWNLOADING_SP = "downloading_sp"
 fun verifyDownloadedFile(data : GitHubFile){
@@ -78,7 +79,9 @@ class PluginCardViewModel(private val data: GitHubFile) : ViewModel() {
             isInstalling = true
             try {
                 id = downloader(
+                    ctx = appCtx,
                     link = data.download_url,
+                    saveFileAt = "${appCtx.filesDir}/$ZIP_FILES/${data.name}",
                     name = data.name,
                     onProgress = { pro -> progress.value = pro },
                     onComplete = { success ->
@@ -118,7 +121,8 @@ class PluginCardViewModel(private val data: GitHubFile) : ViewModel() {
         viewModelScope.launch {
             try {
                 downloadStatusById(
-                    sp.getLong(data.download_url,0),
+                    ctx = appCtx,
+                    downloadId = sp.getLong(data.download_url,0),
                     onProgress = { pro -> progress.value = pro },
                     onComplete = { success ->
                         if (success) {

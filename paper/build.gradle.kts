@@ -1,5 +1,5 @@
 plugins {
-    id("com.android.library")
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias (libs.plugins.kotlin.compose)
@@ -45,29 +45,5 @@ tasks.withType<Test>().configureEach {
 }
 
 dependencies {
-
-    implementation(project(":app"))
-
-    // Align with BOM
-    compileOnly(platform(libs.androidx.compose.bom))
-    compileOnly(libs.androidx.ui)
-    compileOnly(libs.androidx.ui.tooling.preview)
-    compileOnly(libs.androidx.material3)
-    compileOnly(libs.androidx.activity.compose)
-    compileOnly(libs.androidx.lifecycle.runtime.ktx)
-
-    // Optional UI helpers
-    compileOnly(libs.androidx.material.icons.extended)
-    compileOnly(libs.accompanist.pager)
-    compileOnly(libs.accompanist.pager.indicators)
-
-    // Non-UI deps
-    compileOnly(libs.gson)
-    compileOnly(libs.charty)
-    compileOnly(libs.okhttp)
-    compileOnly(libs.retrofit)
-    compileOnly(libs.retrofit.gson)
-    compileOnly(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
-    compileOnly(libs.androidx.room.ktx)
+    compileOnly(project(":dev"))
 }

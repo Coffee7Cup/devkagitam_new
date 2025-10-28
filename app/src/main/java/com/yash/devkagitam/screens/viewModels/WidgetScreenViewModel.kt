@@ -3,10 +3,10 @@ package com.yash.devkagitam.screens.viewModels
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yash.dev.Widget
 import com.yash.devkagitam.__dev__.DevPaperEntity
 import com.yash.devkagitam.db.widgets.WidgetDB
 import com.yash.devkagitam.db.widgets.WidgetEntity
-import com.yash.devkagitam.utils.Widget
 import kotlinx.coroutines.launch
 
 class WidgetScreenViewModel : ViewModel() {

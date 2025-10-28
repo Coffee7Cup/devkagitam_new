@@ -1,4 +1,4 @@
-package com.yash.devkagitam.utils
+package com.yash.dev
 
 import android.annotation.SuppressLint
 import android.content.Context

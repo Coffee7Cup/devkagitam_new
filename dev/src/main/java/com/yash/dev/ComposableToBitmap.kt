@@ -1,4 +1,4 @@
-package com.yash.devkagitam.utils
+package com.yash.dev
 
 import android.content.Context
 import android.graphics.Bitmap

@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "devKagitam"
 include(":app")
 include(":paper")
+include(":dev")

@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
-import com.yash.devkagitam.utils.PaperEntryPoint
+import com.yash.dev.PaperEntryPoint
 
 class Main : PaperEntryPoint() {
     @Composable

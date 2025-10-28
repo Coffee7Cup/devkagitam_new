@@ -1,18 +1,15 @@
-package com.yash.devkagitam.utils
+package com.yash.dev
 
-import com.yash.devkagitam.registries.AppRegistry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.util.zip.ZipInputStream
 
-suspend fun unzipPaper(zipFilePath: String, name: String): String = withContext(Dispatchers.IO) {
-
-    val appContext = AppRegistry.getAppContext()
+suspend fun unzipPaper(zipFilePath: String,saveFileAt: String): String = withContext(Dispatchers.IO) {
 
     // Create plugin output directory
-    val outputDir = File(appContext.filesDir, "papers/$name")
+    val outputDir = File(saveFileAt)
     outputDir.mkdirs()
 
     val zipFile = File(zipFilePath)

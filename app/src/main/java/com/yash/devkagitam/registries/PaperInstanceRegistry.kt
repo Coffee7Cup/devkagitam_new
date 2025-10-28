@@ -1,32 +1,34 @@
 package com.yash.devkagitam.registries
 
+import com.yash.dev.PaperEntryPoint
+import com.yash.dev.Widget
+import com.yash.dev.loadDex
 import com.yash.devkagitam.db.api.ApiEntity
 import com.yash.devkagitam.db.plugins.MetaDataPluginEntity
 import com.yash.devkagitam.db.widgets.WidgetEntity
-import com.yash.devkagitam.utils.PaperEntryPoint
-import com.yash.devkagitam.utils.Widget
-import com.yash.devkagitam.utils.loadDex
 import kotlin.collections.getOrPut
 
 object PaperInstanceRegistry {
     val mapOfInstances = mutableMapOf<String, Any>()
 
     fun getPaperInstance(plugin: MetaDataPluginEntity) : PaperEntryPoint {
+        val ctx = AppRegistry.getAppContext()
         return mapOfInstances.getOrPut(plugin.name){
-            loadDex(plugin.path, plugin.entryPoint)
+            loadDex(ctx,plugin.path, plugin.entryPoint)
         } as PaperEntryPoint
     }
 
     fun getWidgetInstance(widget: WidgetEntity) : Widget {
+        val ctx = AppRegistry.getAppContext()
         return mapOfInstances.getOrPut(widget.id){
-            loadDex(widget.apkPath, widget.widgetClass)
+            loadDex(ctx,widget.apkPath, widget.widgetClass)
         } as Widget
     }
 
     fun getApiClassInstance(api : ApiEntity) : Any{
+        val ctx = AppRegistry.getAppContext()
         return mapOfInstances.getOrPut(api.id){
-            loadDex(api.apkPath, api.apiClass)
+            loadDex(ctx,api.apkPath, api.apiClass)
         }
     }
-
 }
