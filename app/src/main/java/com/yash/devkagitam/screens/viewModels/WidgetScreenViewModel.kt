@@ -1,16 +1,25 @@
 package com.yash.devkagitam.screens.viewModels
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yash.dev.Widget
-import com.yash.devkagitam.__dev__.DevPaperEntity
+import com.yash.paper.__dev__.DevPaperEntity
 import com.yash.devkagitam.db.widgets.WidgetDB
 import com.yash.devkagitam.db.widgets.WidgetEntity
 import kotlinx.coroutines.launch
 
 class WidgetScreenViewModel : ViewModel() {
-  private val widgetDao = WidgetDB.getDatabase().widgetDao()
+
+  val error = mutableStateOf<String?>(null)
+  private val widgetDao = try {
+    WidgetDB.getDatabase().widgetDao()
+  }catch(e : Exception){
+    error.value = e.message
+    Log.d("WSVM", "error ${e.message}")
+    throw e
+  }
   var allWidgets = mutableStateOf<List<WidgetEntity>>(emptyList())
     private set
 

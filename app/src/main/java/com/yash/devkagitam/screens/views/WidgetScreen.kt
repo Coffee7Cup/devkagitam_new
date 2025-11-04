@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yash.dev.Widget
-import com.yash.devkagitam.__dev__.DevPaperEntity
+import com.yash.paper.__dev__.DevPaperEntity
 import com.yash.devkagitam.registries.ContextRegistry
 import com.yash.devkagitam.registries.PaperInstanceRegistry.getWidgetInstance
 import com.yash.devkagitam.db.widgets.WidgetEntity
@@ -115,113 +115,119 @@ fun WidgetScreen() {
             }
         }
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-        ) {
-            Row(
+        if(wsVm.error.value != null) {
+            Text(wsVm.error.value!!)
+        }else{
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 22.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                    .fillMaxSize()
+                    .padding(
+                        top = 8.dp,
+                        start = 16.dp,
+                        end = 16.dp,
+                        bottom = 0.dp
+                    )
             ) {
-                Text(
-                    text = if (showAvailable.value) "Available" else "My Widgets",
-                    fontSize = 32.sp,
-                    color = Color.White
-                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 22.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = if (showAvailable.value) "Available" else "Widgets",
+                        fontSize = 32.sp,
+                        color = Color.White
+                    )
 
-                Row {
-                    IconButton(onClick = { wsVm.refreshWidgets() }) {
-                        Icon(
-                            imageVector = Icons.Rounded.Replay,
-                            contentDescription = "Refresh",
-                            tint = MaterialTheme.colorScheme.error // 🔹 primary for action icons
-                        )
-                    }
+                    Row {
+                        IconButton(onClick = { wsVm.refreshWidgets() }) {
+                            Icon(
+                                imageVector = Icons.Rounded.Replay,
+                                contentDescription = "Refresh",
+                                tint = MaterialTheme.colorScheme.error // 🔹 primary for action icons
+                            )
+                        }
 
-                    IconButton(onClick = { showAvailable.value = !showAvailable.value }) {
-                        Icon(
-                            imageVector = if (showAvailable.value)
-                                Icons.Rounded.ArrowBackIosNew else Icons.Rounded.Add,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.error
-                        )
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                "Dev Widget Section",
-                color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f)
-            )
-            Spacer(Modifier.height(8.dp))
-
-            val devWidInstance = wsVm.devWidgets()
-            LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Adaptive(minSize = 150.dp),
-                contentPadding = PaddingValues(0.dp),
-                verticalItemSpacing = 10.dp,
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-            ) {
-                items(devWidInstance) { widget ->
-                    WidgetCardDev(widget, {}, { /* focus dev widget */ })
-                }
-            }
-
-            Spacer(Modifier.height(16.dp))
-
-            if (showAvailable.value) {
-                if (notSelectedWidgets.isEmpty()) {
-                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(
-                            "No new widgets available.",
-                            color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.6f)
-                        )
-                    }
-                } else {
-                    LazyVerticalStaggeredGrid(
-                        columns = StaggeredGridCells.Adaptive(minSize = 150.dp),
-                        contentPadding = PaddingValues(0.dp),
-                        verticalItemSpacing = 10.dp,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        items(notSelectedWidgets) { widget ->
-                            WidgetCard(widget, { wsVm.addWidget(widget) }, {})
+                        IconButton(onClick = { showAvailable.value = !showAvailable.value }) {
+                            Icon(
+                                imageVector = if (showAvailable.value)
+                                    Icons.Rounded.ArrowBackIosNew else Icons.Rounded.Add,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.error
+                            )
                         }
                     }
                 }
-            } else {
-                if (selectedWidgets.isEmpty()) {
-                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(
-                            "No widgets selected. Tap '+' to add some.",
-                            color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.6f)
-                        )
+
+                Spacer(modifier = Modifier.height(6.dp))
+
+                if (showAvailable.value) {
+                    if (notSelectedWidgets.isEmpty()) {
+                        Box(Modifier.fillMaxWidth().height(200.dp), contentAlignment = Alignment.Center) {
+                            Text(
+                                "No new widgets available.",
+                                color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.6f)
+                            )
+                        }
+                    } else {
+                        LazyVerticalStaggeredGrid(
+                            columns = StaggeredGridCells.Fixed(2),
+                            contentPadding = PaddingValues(0.dp),
+                            verticalItemSpacing = 10.dp,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            items(notSelectedWidgets) { widget ->
+                                WidgetCard(widget, { wsVm.addWidget(widget) }, {})
+                            }
+                        }
                     }
                 } else {
+                    //---------------
+                    Text(
+                        "Dev Widget Section",
+                        color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f)
+                    )
+                    Spacer(Modifier.height(8.dp))
+
+                    val devWidInstance = wsVm.devWidgets()
                     LazyVerticalStaggeredGrid(
-                        columns = StaggeredGridCells.Adaptive(minSize = 150.dp),
-                        contentPadding = PaddingValues(0.dp),
+                        columns = StaggeredGridCells.Fixed(2),
                         verticalItemSpacing = 10.dp,
                         horizontalArrangement = Arrangement.spacedBy(10.dp),
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        items(selectedWidgets) { widget ->
-                            WidgetCard(widget, {}, { focusWidget.value = widget })
+                        items(devWidInstance) { widget ->
+                            WidgetCardDev(widget, {}, {  })
+                        }
+                    }
+                    //-------------------
+                    if (selectedWidgets.isEmpty()) {
+                        Box(Modifier.fillMaxSize().height(100.dp), contentAlignment = Alignment.Center) {
+                            Text(
+                                "No widgets selected. Tap '+' to add some.",
+                                color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.6f)
+                            )
+                        }
+                    } else {
+                        LazyVerticalStaggeredGrid(
+                            columns = StaggeredGridCells.Fixed(2),
+                            contentPadding = PaddingValues(0.dp),
+                            verticalItemSpacing = 10.dp,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            items(selectedWidgets) { widget ->
+                                WidgetCard(widget, {}, { focusWidget.value = widget })
+                            }
                         }
                     }
                 }
             }
         }
+
     }
 }
 
@@ -236,7 +242,6 @@ fun WidgetCard(widget: WidgetEntity, onClick: () -> Unit, onLongClick: () -> Uni
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
             .combinedClickable(onClick = onClick, onLongClick = onLongClick),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.secondary,
@@ -280,7 +285,6 @@ fun WidgetCardDev(widget: Widget, onClick: () -> Unit, onLongClick: () -> Unit) 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
             .combinedClickable(onClick = onClick, onLongClick = onLongClick),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary,        // 🔹 slight contrast for dev

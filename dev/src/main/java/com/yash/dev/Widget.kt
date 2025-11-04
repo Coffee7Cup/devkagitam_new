@@ -24,7 +24,7 @@ abstract class Widget() {
     fun Render(context: Context) {
         Box(
             modifier = Modifier
-                .wrapContentHeight()  // ✅ Natural height based on content
+                .wrapContentHeight()  // ✅ Natural height
         ) {
             Content(Modifier.fillMaxWidth(), context)
         }

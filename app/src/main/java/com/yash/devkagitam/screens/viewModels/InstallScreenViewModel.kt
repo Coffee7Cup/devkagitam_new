@@ -15,6 +15,8 @@ import com.yash.dev.downloadStatusById
 import com.yash.dev.downloader
 import com.yash.devkagitam.registries.AppRegistry
 import com.yash.devkagitam.db.plugins.MetaDataPluginDB
+import com.yash.devkagitam.utils.cancelOkhttpDownload
+import com.yash.devkagitam.utils.downloaderOkhttp
 import com.yash.devkagitam.utils.setupPlugin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +28,6 @@ import java.io.FileNotFoundException
 
 const val ZIP_FILES = "zipFiles"
 
-const val DOWNLOADING_SP = "downloading_sp"
 fun verifyDownloadedFile(data : GitHubFile){
 
 }
@@ -58,99 +59,84 @@ open class PluginCardViewModelFactory(
 class PluginCardViewModel(private val data: GitHubFile) : ViewModel() {
 
     private val appCtx = AppRegistry.getAppContext()
-    private val sp = appCtx.getSharedPreferences(DOWNLOADING_SP, Context.MODE_PRIVATE)
 
-    private val installingPapers = sp.all
-    var isInstalling by mutableStateOf(installingPapers.contains(data.download_url))
+    var isInstalling by mutableStateOf(false)
         private set
 
     var error = mutableStateOf<String?>(null)
     var progress = mutableStateOf<Int?>(null)
 
-    fun startDownload(): Long {
+    fun startDownload() {
         error.value = null
         progress.value = 0
-        var id: Long = 0
+        isInstalling = true
 
         viewModelScope.launch {
-            sp.edit {
-                putLong(data.download_url, 0)
-            }
-            isInstalling = true
             try {
-                id = downloader(
-                    ctx = appCtx,
+                downloaderOkhttp(
                     link = data.download_url,
                     saveFileAt = "${appCtx.filesDir}/$ZIP_FILES/${data.name}",
-                    name = data.name,
-                    onProgress = { pro -> progress.value = pro },
+                    onProgress = { pro ->
+                        progress.value = pro
+                    },
                     onComplete = { success ->
                         if (success) {
                             verifyDownloadedFile(data)
+
                             CoroutineScope(Dispatchers.Default).launch {
                                 try {
                                     val pluginPath = "${appCtx.filesDir}/$ZIP_FILES/${data.name}"
-                                    setupPlugin(pluginPath,data.name)
+                                    setupPlugin(pluginPath, data.name)
                                 } catch (e: FileNotFoundException) {
                                     withContext(Dispatchers.Main) {
-                                        error.value = "metaData.json missing in plugin: ${data.name}, ${e.message}"
+                                        error.value =
+                                            "metaData.json missing in plugin: ${data.name}, ${e.message}"
                                     }
                                 } catch (e: Exception) {
                                     withContext(Dispatchers.Main) {
                                         error.value = "Setup failed: ${e.message}"
                                     }
+                                } finally {
+                                    withContext(Dispatchers.Main) {
+                                        isInstalling = false
+                                    }
                                 }
                             }
-                            sp.edit { remove(data.download_url) }
-                            isInstalling = false
                         } else {
                             error.value = "Download failed"
+                            isInstalling = false
                         }
                     }
                 )
             } catch (e: Exception) {
                 error.value = e.message ?: "Unknown error"
+                isInstalling = false
             }
         }
-
-        return id
     }
 
-    fun alreadyDownloading() {
-        error.value = null
+    fun cancelDownload() {
+        isInstalling = false
+        progress.value = null
+
         viewModelScope.launch {
-            try {
-                downloadStatusById(
-                    ctx = appCtx,
-                    downloadId = sp.getLong(data.download_url,0),
-                    onProgress = { pro -> progress.value = pro },
-                    onComplete = { success ->
-                        if (success) {
-                            verifyDownloadedFile(data)
-                            CoroutineScope(Dispatchers.Default).launch {
-                                try {
-                                    val pluginPath = "${appCtx.filesDir}/$ZIP_FILES/${data.name}"
-                                    setupPlugin(pluginPath,data.name)
-                                } catch (e: FileNotFoundException) {
-                                    withContext(Dispatchers.Main) {
-                                        error.value = "metaData.json missing in plugin: ${data.name}, ${e.message}"
-                                    }
-                                } catch (e: Exception) {
-                                    withContext(Dispatchers.Main) {
-                                        error.value = "Setup failed: ${e.message}"
-                                    }
-                                }
-                            }
-                            sp.edit { remove(data.download_url) }
-                            isInstalling=false
-                        } else {
-                            error.value = "Download failed"
-                        }
-                    }
-                )
-            } catch (e: Exception) {
-                error.value = e.message ?: "Unknown error"
-            }
+           try {
+               cancelOkhttpDownload(
+                   link = data.download_url,
+                   savedFileLoc = "${appCtx.filesDir}/$ZIP_FILES/${data.name}",
+                   onComplete = { success ->
+                       viewModelScope.launch(Dispatchers.Main) {
+                           if (!success) {
+                               error.value = "Failed to cancel"
+                           }
+                       }
+                   }
+               )
+           }catch(e: Error){
+               error.value = e.message
+           }catch (e: Exception){
+               error.value = e.message
+           }
         }
     }
 
@@ -232,3 +218,36 @@ class InstallScreenViewModel : ViewModel() {
         }
     }
 }
+
+
+//--------------------------paste below in cardVM.download
+//id = downloader(
+//ctx = appCtx,
+//link = data.download_url,
+//saveFileAt = "${appCtx.filesDir}/$ZIP_FILES/${data.name}",
+//name = data.name,
+//onProgress = { pro -> progress.value = pro },
+//onComplete = { success ->
+//    if (success) {
+//        verifyDownloadedFile(data)
+//        CoroutineScope(Dispatchers.Default).launch {
+//            try {
+//                val pluginPath = "${appCtx.filesDir}/$ZIP_FILES/${data.name}"
+//                setupPlugin(pluginPath,data.name)
+//            } catch (e: FileNotFoundException) {
+//                withContext(Dispatchers.Main) {
+//                    error.value = "metaData.json missing in plugin: ${data.name}, ${e.message}"
+//                }
+//            } catch (e: Exception) {
+//                withContext(Dispatchers.Main) {
+//                    error.value = "Setup failed: ${e.message}"
+//                }
+//            }
+//        }
+//        sp.value.edit { remove(data.download_url) }
+//        isInstalling = false
+//    } else {
+//        error.value = "Download failed"
+//    }
+//}
+//)

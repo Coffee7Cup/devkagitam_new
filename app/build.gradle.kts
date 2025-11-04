@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias { libs.plugins.ksp }
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -50,5 +50,6 @@ dependencies {
     //dev deps
     implementation(project(":dev"))
     implementation(project(":paper"))
+    ksp(libs.androidx.room.compiler)
 
 }

@@ -23,7 +23,7 @@ abstract class WidgetDB : RoomDatabase() {
                     WidgetDB::class.java,
                     WIDGET_DB
                 )
-                    .fallbackToDestructiveMigration() // optional: wipes db on schema change
+                    .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
                 instance

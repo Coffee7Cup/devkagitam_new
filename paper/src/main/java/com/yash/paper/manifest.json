@@ -1,0 +1,24 @@
+{
+  "name": "Say_Hello",
+  "author": "Yash",
+  "version": "1.0.0",
+  "entryPoint": "com.yash.paper.Main",
+  "widgets": [
+    "com.yash.paper.widgets.TinyWidget",
+    "com.yash.paper.widgets.SmallWidget",
+    "com.yash.paper.widgets.MediumWidget",
+    "com.yash.paper.widgets.LargeWidget",
+    "com.yash.paper.widgets.SmallWidget",
+    "com.yash.paper.widgets.TinyWidget",
+    "com.yash.paper.widgets.MediumWidget",
+    "com.yash.paper.widgets.LargeWidget",
+    "com.yash.paper.widgets.TinyWidget",
+    "com.yash.paper.widgets.LargeWidget",
+    "com.yash.paper.widgets.SmallWidget",
+    "com.yash.paper.widgets.TinyWidget",
+    "com.yash.paper.widgets.MediumWidget",
+    "com.yash.paper.widgets.LargeWidget",
+    "com.yash.paper.widgets.TinyWidget"
+  ],
+  "apiClass": ["com.yash.paper.api.ApiClass"]
+}

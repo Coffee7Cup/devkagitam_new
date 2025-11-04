@@ -36,7 +36,7 @@ suspend fun setupPlugin(parent_path: String, name: String) {
   //Unzip the file here---very important-------
 
  try {
-   val metaFile = File(path, "metaData.json")
+   val metaFile = File(path, "manifest.json")
    val fileMeta = Gson().fromJson(FileReader(metaFile), MetaDataFile::class.java)
 
    // Save metadata, widgets, APIs etc.
@@ -44,7 +44,6 @@ suspend fun setupPlugin(parent_path: String, name: String) {
      name = fileMeta.name,
      author = fileMeta.author,
      version = fileMeta.version,
-     id = fileMeta.id,
      entryPoint = fileMeta.entryPoint,
      widgets = fileMeta.widgets,
      apiClass = fileMeta.apiClass,

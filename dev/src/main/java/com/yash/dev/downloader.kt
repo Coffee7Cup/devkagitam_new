@@ -109,5 +109,41 @@ fun downloadStatusById(ctx: Context,downloadId : Long, onProgress: (Int) -> Unit
             delay(250)
         }
     }
+}
 
+fun cancelDownload(ctx: Context, downloadId: Long, onSuccess: (Boolean) -> Unit ){
+
+    val downloadManager = ctx.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+
+    CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val query = DownloadManager.Query().setFilterById(downloadId)
+            val cursor: Cursor = downloadManager.query(query)
+
+            var found = false
+            cursor.use {
+                if (it.moveToFirst()) {
+                    found = true
+                }
+            }
+
+            if (found) {
+                // Remove cancels the download and deletes partial file
+                val removedCount = downloadManager.remove(downloadId)
+                withContext(Dispatchers.Main) {
+                    onSuccess(removedCount > 0)
+                }
+            } else {
+                // No such download found
+                withContext(Dispatchers.Main) {
+                    onSuccess(false)
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            withContext(Dispatchers.Main) {
+                onSuccess(false)
+            }
+        }
+    }
 }

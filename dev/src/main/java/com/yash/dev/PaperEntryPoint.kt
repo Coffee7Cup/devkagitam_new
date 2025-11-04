@@ -44,8 +44,8 @@ abstract class PaperEntryPoint {
                         launchSingleTop = true
                     } },
                 modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(start = 12.dp, top = 4.dp)
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 12.dp, bottom = 14.dp)
                     .size(40.dp)
                     .clip(CircleShape),
                 colors = ButtonDefaults.buttonColors(

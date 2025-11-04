@@ -1,6 +1,5 @@
 package com.yash.devkagitam.screens.views
 
-import android.graphics.fonts.FontStyle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yash.dev.PaperEntryPoint
-import com.yash.devkagitam.__dev__.DevPaperEntity
+import com.yash.paper.__dev__.DevPaperEntity
 import com.yash.devkagitam.db.plugins.MetaDataPluginEntity
 import com.yash.devkagitam.registries.AppRegistry
 import com.yash.devkagitam.registries.ContextRegistry
@@ -104,15 +103,11 @@ fun PaperScreen(vm: PaperScreenViewModel = viewModel()) {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 4.dp)
+                        .padding(vertical = 4.dp, horizontal = 2.dp)
                         .clickable(onClick = { launchDevPaper() }),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = MaterialTheme.colorScheme.tertiary
-                    ),
                     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                 ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
+                    Column(modifier = Modifier.padding(12.dp)) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -162,10 +157,6 @@ fun PaperCard(paper: MetaDataPluginEntity) {
             .fillMaxWidth()
             .padding(vertical = 4.dp)
             .clickable(onClick = { cardVm.loadPaper() }),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.tertiary
-        ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
