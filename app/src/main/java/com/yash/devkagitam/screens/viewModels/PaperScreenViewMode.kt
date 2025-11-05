@@ -5,10 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.yash.devkagitam.db.api.ApiDB
 import com.yash.devkagitam.registries.AppRegistry
 import com.yash.devkagitam.registries.PaperInstanceRegistry
 import com.yash.devkagitam.db.plugins.MetaDataPluginDB
 import com.yash.devkagitam.db.plugins.MetaDataPluginEntity
+import com.yash.devkagitam.db.widgets.WidgetDB
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -23,9 +26,7 @@ class PaperScreenViewModel : ViewModel(){
 
     fun refreshPapers(){
        viewModelScope.launch {
-           Log.d("PSVM","init ${pluginDao}")
            allPapers.value = pluginDao.getAllPlugins()
-           Log.d("PSVM","${allPapers.value.size}")
        }
     }
 }
@@ -54,6 +55,15 @@ class PaperElementViewModel(val data: MetaDataPluginEntity): ViewModel(){
         viewModelScope.launch {
             try{
                 val pluginDao = MetaDataPluginDB.getDatabase().metaDataPluginDao()
+                val widgetDao = WidgetDB.getDatabase().widgetDao()
+                val apiDao = ApiDB.getDatabase().apiDao()
+
+                if(apiDao.getApiByOwner(data.name ) != null){
+                    apiDao.delete(apiDao.getApiByOwner(data.name))
+                }
+
+                //TODO : Optimize below code buy adding Quires in Dao
+                widgetDao.getWidgetsByOwner(data.name).forEach { widgetDao.delete(it) }
                 pluginDao.delete(data)
                 val file = File(data.path)
                 file.deleteRecursively()

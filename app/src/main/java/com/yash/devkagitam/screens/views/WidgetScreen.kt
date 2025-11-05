@@ -1,5 +1,6 @@
 package com.yash.devkagitam.screens.views
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBackIosNew
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Replay
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -33,6 +35,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,8 +43,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yash.dev.Widget
 import com.yash.paper.__dev__.DevPaperEntity
@@ -56,6 +61,7 @@ fun WidgetScreen() {
     val wsVm: WidgetScreenViewModel = viewModel()
     val showAvailable = rememberSaveable { mutableStateOf(false) }
     val focusWidget = remember { mutableStateOf<WidgetEntity?>(null) }
+    val focusWidgetDev = remember { mutableStateOf<Widget?>(null) }
 
     val allWidgets by wsVm.allWidgets
     val selectedWidgets = remember(allWidgets) { allWidgets.filter { it.selected } }
@@ -66,7 +72,7 @@ fun WidgetScreen() {
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.secondary)
     ) {
-        // Focused widget overlay
+
         focusWidget.value?.let { widget ->
             val ctx = ContextRegistry.getPluginContext(widget.owner)
             val widInstance = getWidgetInstance(widget)
@@ -75,23 +81,28 @@ fun WidgetScreen() {
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.Black.copy(alpha = 0.8f))
+                    .zIndex(10f)
                     .clickable { focusWidget.value = null },
                 contentAlignment = Alignment.Center
             ) {
-                widInstance.OnHold(ctx)
+                CompositionLocalProvider(LocalContext provides ctx) {
+                    widInstance.OnHold(ctx)
+                }
             }
 
             Box(
                 Modifier
                     .fillMaxSize()
-                    .padding(16.dp),
-                contentAlignment = Alignment.BottomEnd
+                    .padding(16.dp)
+                    .zIndex(11f),
+                contentAlignment = Alignment.TopEnd
             ) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     TextButton(
+                        modifier = Modifier.padding(10.dp),
                         onClick = { focusWidget.value = null },
                         colors = ButtonDefaults.textButtonColors(
-                            contentColor = MaterialTheme.colorScheme.tertiary // 🔹 use tertiary for text
+                            contentColor = MaterialTheme.colorScheme.tertiary
                         )
                     ) {
                         Icon(Icons.Rounded.Close, contentDescription = "Close Focus")
@@ -100,16 +111,62 @@ fun WidgetScreen() {
                     }
 
                     Button(
+                        modifier = Modifier.padding(10.dp),
                         onClick = {
                             wsVm.removeWidget(widget)
                             focusWidget.value = null
                         },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.error,   // 🔹 custom error red
+                            containerColor = MaterialTheme.colorScheme.error,
                             contentColor = MaterialTheme.colorScheme.onError
                         )
                     ) {
                         Text("Remove Widget")
+                    }
+                }
+            }
+        }
+
+        focusWidgetDev.value?.let{ widget ->
+
+            val ctx = ContextRegistry.getPluginContext(DevPaperEntity.name)
+
+            Log.d("WS", "in focusWidgetDev $ctx")
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.8f))
+                    .zIndex(10f)
+                    .clickable { focusWidget.value = null },
+                contentAlignment = Alignment.Center
+            ) {
+                CompositionLocalProvider(LocalContext provides ctx) {
+                    Log.d("WS", "in focusWidgetDev 1 :$ctx")
+                    widget.OnHold(ctx)
+                    Log.d("WS", "in focusWidgetDev 2 :$ctx")
+                }
+            }
+
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+                    .zIndex(11f),
+
+                contentAlignment = Alignment.TopEnd
+            ) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    TextButton(
+                        modifier = Modifier.padding(10.dp),
+                        onClick = { focusWidgetDev.value = null },
+                        colors = ButtonDefaults.textButtonColors(
+                            contentColor = MaterialTheme.colorScheme.tertiary
+                        )
+                    ) {
+                        Icon(Icons.Rounded.Close, contentDescription = "Close Focus")
+                        Spacer(Modifier.width(4.dp))
+                        Text("Close")
                     }
                 }
             }
@@ -144,7 +201,7 @@ fun WidgetScreen() {
                     Row {
                         IconButton(onClick = { wsVm.refreshWidgets() }) {
                             Icon(
-                                imageVector = Icons.Rounded.Replay,
+                                imageVector = Icons.Rounded.Refresh,
                                 contentDescription = "Refresh",
                                 tint = MaterialTheme.colorScheme.error // 🔹 primary for action icons
                             )
@@ -200,7 +257,7 @@ fun WidgetScreen() {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         items(devWidInstance) { widget ->
-                            WidgetCardDev(widget, {}, {  })
+                            WidgetCardDev(widget, {focusWidgetDev.value = widget}, { focusWidgetDev.value = widget })
                         }
                     }
                     //-------------------
@@ -242,7 +299,10 @@ fun WidgetCard(widget: WidgetEntity, onClick: () -> Unit, onLongClick: () -> Uni
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .combinedClickable(onClick = onClick, onLongClick = onLongClick),
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick
+            ),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.secondary,
             contentColor = MaterialTheme.colorScheme.tertiary
@@ -250,7 +310,10 @@ fun WidgetCard(widget: WidgetEntity, onClick: () -> Unit, onLongClick: () -> Uni
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Box(Modifier.fillMaxSize()) {
-            widInstance.Render(ctx)
+
+            CompositionLocalProvider(LocalContext provides ctx) {
+                widInstance.Render(ctx)
+            }
 
             if (!widget.selected) {
                 Box(
@@ -285,14 +348,25 @@ fun WidgetCardDev(widget: Widget, onClick: () -> Unit, onLongClick: () -> Unit) 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .combinedClickable(onClick = onClick, onLongClick = onLongClick),
+            .combinedClickable(
+                onClick = {
+                    onClick()
+                    Log.d("WCD", "clicked $widget")
+                          },
+
+                onLongClick = {
+                    onLongClick()
+                    Log.d("WCD","long clicked $widget")
+                }
+            ),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primary,        // 🔹 slight contrast for dev
+            containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.tertiary
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Box(Modifier.fillMaxSize()) {
+
             widget.Render(ctx)
             Box(
                 modifier = Modifier

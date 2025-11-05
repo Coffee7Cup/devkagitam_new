@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 class WidgetScreenViewModel : ViewModel() {
 
   val error = mutableStateOf<String?>(null)
+  private var _devWidgets: List<Widget>? = null
   private val widgetDao = try {
     WidgetDB.getDatabase().widgetDao()
   }catch(e : Exception){
@@ -51,16 +52,14 @@ class WidgetScreenViewModel : ViewModel() {
     }
   }
 
-  fun devWidgets() : List<Widget>{
-
-    val widgets = DevPaperEntity.widgets
-
-    val instances: List<Widget> = widgets.map{
-      val cls =Class.forName(it)
-      val inst = cls.getDeclaredConstructor().newInstance() as Widget
-      inst
+  fun devWidgets(): List<Widget> {
+    if (_devWidgets == null) {
+      val widgets = DevPaperEntity.widgets
+      _devWidgets = widgets.map {
+        val cls = Class.forName(it)
+        cls.getDeclaredConstructor().newInstance() as Widget
+      }
     }
-    return instances
+    return _devWidgets!!
   }
-
 }

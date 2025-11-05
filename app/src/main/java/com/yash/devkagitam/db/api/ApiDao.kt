@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import java.security.acl.Owner
 
 @Dao
 interface ApiDao{
@@ -23,5 +22,5 @@ interface ApiDao{
     suspend fun getAllApis() : List<ApiEntity>
 
     @Query("SELECT * FROM api_db WHERE owner = :owner")
-    suspend fun getApiByName(owner : String) : ApiEntity
+    suspend fun getApiByOwner(owner : String) : ApiEntity
 }

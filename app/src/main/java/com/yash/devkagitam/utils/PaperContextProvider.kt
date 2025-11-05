@@ -12,7 +12,7 @@ import java.io.File
 
 class PaperContextProvider(
     private val paperName: String,
-    base: Context = AppRegistry.getAppContext() // host app context
+    base: Context = AppRegistry.getAppContext()
 ) : ContextWrapper(base) {
 
     /** ---------------- Resources & Assets ---------------- */
@@ -59,19 +59,19 @@ class PaperContextProvider(
 
     /** ---------------- Files & Cache ---------------- */
     override fun getFilesDir(): File {
-        val dir = File(baseContext.filesDir, "plugins/$paperName/files")
+        val dir = File(baseContext.filesDir, "papers/$paperName/files")
         if (!dir.exists()) dir.mkdirs()
         return dir
     }
 
     override fun getCacheDir(): File {
-        val dir = File(baseContext.cacheDir, "plugins/$paperName/cache")
+        val dir = File(baseContext.cacheDir, "papers/$paperName/cache")
         if (!dir.exists()) dir.mkdirs()
         return dir
     }
 
     fun getPluginRootDir(): File {
-        val dir = File(baseContext.filesDir, "plugins/$paperName")
+        val dir = File(baseContext.filesDir, "papers/$paperName")
         if (!dir.exists()) dir.mkdirs()
         return dir
     }

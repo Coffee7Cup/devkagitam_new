@@ -4,7 +4,7 @@ import java.util.UUID
 
 
 object DevPaperEntity {
-    val name: String = "DevTest"
+    val name: String = "Tanu"
     val author: String = "Yash"
     val version: String = "1.0.0"
     val id: String = UUID.randomUUID().toString()

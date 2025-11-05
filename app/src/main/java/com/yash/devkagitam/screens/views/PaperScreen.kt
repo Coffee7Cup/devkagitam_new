@@ -27,11 +27,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -149,6 +151,7 @@ fun PaperScreen(vm: PaperScreenViewModel = viewModel()) {
 fun PaperCard(paper: MetaDataPluginEntity) {
 
     val cardVm: PaperElementViewModel = viewModel(
+        key = "paper-card-${paper.name}",
         factory = remember(paper) { PaperElementViewModelFactory(paper) }
     )
 
@@ -230,7 +233,9 @@ fun CurrentPaperScreen(){
         val navController = AppRegistry.getNavController()
         if (instance != null && name != null) {
             val ctx = ContextRegistry.getPluginContext(name)
-            instance.RenderWithHome(ctx, navController)
+            CompositionLocalProvider(LocalContext provides ctx) {
+                instance.RenderWithHome(ctx, navController)
+            }
         } else {
             Text("No paper loaded")
         }

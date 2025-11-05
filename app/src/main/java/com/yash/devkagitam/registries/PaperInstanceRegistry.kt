@@ -14,21 +14,21 @@ object PaperInstanceRegistry {
     fun getPaperInstance(plugin: MetaDataPluginEntity) : PaperEntryPoint {
         val ctx = AppRegistry.getAppContext()
         return mapOfInstances.getOrPut(plugin.name){
-            loadDex(ctx,plugin.path, plugin.entryPoint)
+            loadDex(ctx,"${plugin.path}", plugin.entryPoint)
         } as PaperEntryPoint
     }
 
     fun getWidgetInstance(widget: WidgetEntity) : Widget {
         val ctx = AppRegistry.getAppContext()
         return mapOfInstances.getOrPut(widget.id){
-            loadDex(ctx,widget.apkPath, widget.widgetClass)
+            loadDex(ctx,"${widget.apkPath}", widget.widgetClass)
         } as Widget
     }
 
     fun getApiClassInstance(api : ApiEntity) : Any{
         val ctx = AppRegistry.getAppContext()
         return mapOfInstances.getOrPut(api.id){
-            loadDex(ctx,api.apkPath, api.apiClass)
+            loadDex(ctx,"${api.apkPath}", api.apiClass)
         }
     }
 }

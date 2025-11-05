@@ -61,7 +61,7 @@ fun InstallScreen(viewModel: InstallScreenViewModel = viewModel()) {
                 fontSize = 32.sp,
                 color = Color.White
             )
-            IconButton(onClick = { viewModel.loadPlugins(true) }) {
+            IconButton(onClick = { viewModel.loadPlugins() }) {
                 Icon(
                     imageVector = Icons.Outlined.Replay,
                     contentDescription = "Reload",
@@ -84,7 +84,7 @@ fun InstallScreen(viewModel: InstallScreenViewModel = viewModel()) {
                         color = MaterialTheme.colorScheme.error,
                     )
                     Spacer(Modifier.height(8.dp))
-                    Button(onClick = { viewModel.loadPlugins(true) }) {
+                    Button(onClick = { viewModel.loadPlugins() }) {
                         Text("Retry")
                     }
                 }

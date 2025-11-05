@@ -9,6 +9,7 @@ import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import com.yash.dev.downloadStatusById
@@ -87,10 +88,11 @@ class PluginCardViewModel(private val data: GitHubFile) : ViewModel() {
                                 try {
                                     val pluginPath = "${appCtx.filesDir}/$ZIP_FILES/${data.name}"
                                     setupPlugin(pluginPath, data.name)
+
                                 } catch (e: FileNotFoundException) {
                                     withContext(Dispatchers.Main) {
                                         error.value =
-                                            "metaData.json missing in plugin: ${data.name}, ${e.message}"
+                                            "manifest.json missing in plugin: ${data.name}, ${e.message}"
                                     }
                                 } catch (e: Exception) {
                                     withContext(Dispatchers.Main) {
@@ -177,8 +179,7 @@ class InstallScreenViewModel : ViewModel() {
         viewModelScope.launch { refreshInstalled() }
     }
 
-    fun loadPlugins(force: Boolean = false) {
-        if (loadedOnce && !force) return
+    fun loadPlugins() {
 
         isLoading = true
         viewModelScope.launch(Dispatchers.IO) {
@@ -196,9 +197,15 @@ class InstallScreenViewModel : ViewModel() {
                     val parsed = if (element.isJsonArray) {
                         gson.fromJson(element, Array<GitHubFile>::class.java)
                             .filter { it.name.endsWith(".zip") }
+                            .map{
+                                it.copy(name = it.name.removeSuffix(".zip"))
+                            }
                     } else {
                         listOf(gson.fromJson(element, GitHubFile::class.java))
                             .filter { it.name.endsWith(".zip") }
+                            .map{
+                                it.copy(name = it.name.removeSuffix(".zip"))
+                            }
                     }
 
                     withContext(Dispatchers.Main) {

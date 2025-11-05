@@ -1,5 +1,5 @@
 {
-  "name": "Say_Hello",
+  "name": "Tanu",
   "author": "Yash",
   "version": "1.0.0",
   "entryPoint": "com.yash.paper.Main",
@@ -19,6 +19,5 @@
     "com.yash.paper.widgets.MediumWidget",
     "com.yash.paper.widgets.LargeWidget",
     "com.yash.paper.widgets.TinyWidget"
-  ],
-  "apiClass": ["com.yash.paper.api.ApiClass"]
+  ]
 }

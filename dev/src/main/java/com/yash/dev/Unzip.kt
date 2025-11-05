@@ -6,7 +6,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.zip.ZipInputStream
 
-suspend fun unzipPaper(zipFilePath: String,saveFileAt: String): String = withContext(Dispatchers.IO) {
+suspend fun unzip(zipFilePath: String, saveFileAt: String): String = withContext(Dispatchers.IO) {
 
     // Create plugin output directory
     val outputDir = File(saveFileAt)
