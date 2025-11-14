@@ -19,3 +19,20 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Preserve reflection-based class loading (for DexClassLoader)
+-keep class com.yash.paper.** { *; }
+
+# Keep any dynamically loaded or reflective classes
+-keepclassmembers class * {
+    @androidx.annotation.Keep *;
+}
+
+# Keep your dynamic loader code (to avoid optimization issues)
+-keep class com.yash.dev.DexLoaderKt { *; }
+
+# Keep dalvik and system classloaders
+-keep class dalvik.system.** { *; }
+
+# (Optional but recommended) preserve annotations and line info for debugging
+-keepattributes SourceFile,LineNumberTable,RuntimeVisibleAnnotations,RuntimeVisibleParameterAnnotations

@@ -19,7 +19,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "devKagitam"
+rootProject.name = "Kagitam"
 include(":app")
 include(":paper")
-include(":dev")
+include(":deps")

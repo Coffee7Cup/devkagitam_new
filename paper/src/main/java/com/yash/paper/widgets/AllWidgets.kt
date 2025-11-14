@@ -17,202 +17,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.yash.dev.Widget
-import com.yash.paper.ui.theme.DevTheme
+import com.yash.deps.Widget
 
-class SmallWidget : Widget() {
+class SmallWidget : Widget(){
     @Composable
-    override fun Content(modifier: Modifier, ctx: Context) {
-        DevTheme {
-            Box(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .background(Color(0xFF1E88E5))
-                    .padding(16.dp),
-                contentAlignment = Alignment.Center
-            ){
-                Text("Small", color = Color.White, fontSize = 16.sp)
-            }
+    override fun Content(modifier: Modifier) {
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
+                .background(Color.Magenta)
+                .padding(50.dp),
+            contentAlignment = Alignment.Center
+        ){
+            Text("AMMAMMA, I LOVE YOUUUU", color = Color.White, fontSize = 16.sp)
         }
     }
 
     @Composable
-    override fun OnHold(ctx: Context) {
+    override fun OnHold() {
         Box(
             Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ){
-            Text("Held", color = Color.White, fontSize = 16.sp)
+            Text("LOVE YOU MOREEE AMMAMMA", color = Color.White, fontSize = 16.sp)
         }
     }
 
     @Composable
-    override fun OnClick(ctx: Context) {
+    override fun OnClick() {
         Box(
-            Modifier.fillMaxSize()
+            Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ){
-            Text("Clicked")
-        }
-    }
-}
-
-// Medium widget
-class MediumWidget : Widget() {
-    @Composable
-    override fun Content(modifier: Modifier, ctx: Context) {
-        DevTheme {
-            Column(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .background(Color(0xFF43A047))
-                    .padding(20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ){
-                Text("Medium Widget", color = Color.White, fontSize = 18.sp)
-                Spacer(Modifier.height(8.dp))
-                Text("More content here", color = Color.White, fontSize = 14.sp)
-                Spacer(Modifier.height(8.dp))
-                Text("Even more text", color = Color.White, fontSize = 14.sp)
-            }
-        }
-    }
-    @Composable
-    override fun OnHold(ctx: Context) {
-        Box(
-            Modifier.fillMaxSize()
-        ){
-            Text("Held")
+            Text("LOVE YOU EVEN MOREE AMMAMMA", color = Color.White, fontSize = 16.sp)
         }
     }
 
-    @Composable
-    override fun OnClick(ctx: Context) {
-        Box(
-            Modifier.fillMaxSize()
-        ){
-            Text("Clicked")
-        }
-    }
-}
-
-// Large widget
-class LargeWidget : Widget() {
-    @Composable
-    override fun Content(modifier: Modifier, ctx: Context) {
-        DevTheme {
-            Column(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .background(Color(0xFFE53935))
-                    .padding(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ){
-                Text("Large Widget", color = Color.White, fontSize = 20.sp)
-                Spacer(Modifier.height(12.dp))
-                Text("This widget has", color = Color.White, fontSize = 14.sp)
-                Spacer(Modifier.height(8.dp))
-                Text("a lot more", color = Color.White, fontSize = 14.sp)
-                Spacer(Modifier.height(8.dp))
-                Text("content inside it", color = Color.White, fontSize = 14.sp)
-                Spacer(Modifier.height(8.dp))
-                Text("to demonstrate", color = Color.White, fontSize = 14.sp)
-                Spacer(Modifier.height(8.dp))
-                Text("variable heights", color = Color.White, fontSize = 14.sp)
-            }
-        }
-    }
-    @Composable
-    override fun OnHold(ctx: Context) {
-        Box(
-            Modifier.fillMaxSize()
-        ){
-            Text("Held")
-        }
-    }
-
-    @Composable
-    override fun OnClick(ctx: Context) {
-        Box(
-            Modifier.fillMaxSize()
-        ){
-            Text("Clicked")
-        }
-    }
-}
-
-// Extra small widget
-class TinyWidget : Widget() {
-    @Composable
-    override fun Content(modifier: Modifier, ctx: Context) {
-        DevTheme {
-            Box(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .background(Color(0xFFFB8C00))
-                    .padding(12.dp),
-                contentAlignment = Alignment.Center
-            ){
-                Text("Tiny", color = Color.White, fontSize = 14.sp)
-            }
-        }
-    }
-    @Composable
-    override fun OnHold(ctx: Context) {
-        Box(
-            Modifier.fillMaxSize()
-        ){
-            Text("Held")
-        }
-    }
-
-    @Composable
-    override fun OnClick(ctx: Context) {
-        Box(
-            Modifier.fillMaxSize()
-        ){
-            Text("Clicked")
-        }
-    }
-}
-
-// Tall widget
-class TallWidget : Widget() {
-    @Composable
-    override fun Content(modifier: Modifier, ctx: Context) {
-        DevTheme {
-            Column(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .background(Color(0xFF8E24AA))
-                    .padding(20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ){
-                repeat(8) { index ->
-                    Text(
-                        "Line ${index + 1}",
-                        color = Color.White,
-                        fontSize = 14.sp
-                    )
-                }
-            }
-        }
-    }
-    @Composable
-    override fun OnHold(ctx: Context) {
-        Box(
-            Modifier.fillMaxSize()
-        ){
-            Text("Held")
-        }
-    }
-
-    @Composable
-    override fun OnClick(ctx: Context) {
-        Box(
-            Modifier.fillMaxSize()
-        ){
-            Text("Clicked")
-        }
-    }
 }
